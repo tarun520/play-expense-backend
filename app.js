@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const cors=require('cors')
 const signuproutes=require('./routes/signup')
 const loginroutes=require('./routes/login')
+const expenseroutes=require('./routes/exps.js')
 
 const app=express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -14,6 +15,7 @@ app.use(cors())
 
 app.use(signuproutes)
 app.use(loginroutes)
+app.use(expenseroutes)
 
 sequelize.sync()
 .then(app.listen(3000))
