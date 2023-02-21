@@ -10,6 +10,7 @@ const signuproutes=require('./routes/signup')
 const loginroutes=require('./routes/login')
 const expenseroutes=require('./routes/exps.js')
 const purchaseroutes=require('./routes/purchase')
+const premiumfeatureroutes=require('./routes/premiumfeatures')
 
 const app=express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,6 +21,7 @@ app.use(signuproutes)
 app.use(loginroutes)
 app.use(expenseroutes)
 app.use(purchaseroutes)
+app.use(premiumfeatureroutes)
 
 user.hasMany(expenses);
 expenses.belongsTo(user)

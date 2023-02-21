@@ -1,10 +1,12 @@
 const razorpay=require('razorpay')
 const Order=require('../purdefine')
+const user=require('../define')
+
 
 exports.purchasepremium=(req,res,next)=>{
     const rzp=new razorpay({
-        key_id:'rzp_test_P50nvoaTKdgqqq',
-        key_secret:'kvl71zSdEFli9Gfzj8lUs5eR'
+        key_id:'rzp_test_hkrqYCleSJ13Lh',
+        key_secret:'IAdtjcKaIQtuI4P5fOoANWgv'
     })
     const amount=2500;
     rzp.orders.create({amount,currency:'INR'},(err,order)=>{
@@ -14,7 +16,7 @@ exports.purchasepremium=(req,res,next)=>{
         }
         req.user.createOrder({orderId:order.id,status:'PENDING'})
         .then(()=>{
-            return res.status(201).json({order,key_id:rzp.key_id})
+            return res.json({order,key_id:rzp.key_id})
         }).catch(err=>{
             throw new Error(err)
         })
@@ -28,9 +30,9 @@ exports.updatestatus=async(req,res,next)=>{
         const order=await Order.findOne({where:{orderId:order_id}})
             const promise1= order.update({paymentId:payment_id,status:'success'})
             const promise2= req.user.update({ispremiumuser:true})
-         Promise.All([promise1,promise2])
-         .then((res)=>{
-             res.status(201).json({success:true,message:'transaction successfull'})
+         Promise.all([promise1,promise2])
+         .then((results)=>{
+             res.status(201).json({success:true,message:'transaction successfull',ispremiumuser:req.user.ispremiumuser})
          }).catch(err=>
              {throw new Error(err)})
     }

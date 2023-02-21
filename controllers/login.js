@@ -13,9 +13,9 @@ function isstringvalidate(string)
     if(string==undefined || string.length===0)return true;
     return false;
 }
-function generatetoken(id,name)
+function generatetoken(id,name,ispremiumuser)
 {
-    return jwt.sign({userid:id,name:name},'urhuwqjiakeiq')
+    return jwt.sign({userid:id,name:name,ispremiumuser:ispremiumuser},'urhuwqjiakeiq')
 }
 
 exports.isuser=async(req,res,next)=>{
@@ -36,7 +36,7 @@ exports.isuser=async(req,res,next)=>{
             }
             if(result===true)
             {
-                return res.status(201).json({message:'user logged in',token:generatetoken(users[0].id,users[0].name)})
+                return res.status(201).json({message:'user logged in',token:generatetoken(users[0].id,users[0].name,users[0].ispremiumuser)})
             }
             else{
                return res.status(401).json({message:'password incorrect'})

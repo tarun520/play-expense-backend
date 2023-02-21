@@ -17,8 +17,8 @@ exports.postexps=async(req,res,next)=>{
         console.log(data);
         res.status(201).json({data:data})
         } catch (error) {
-            console.log(err)
-            res.status(500).json({err:err})
+            console.log(error)
+            res.status(500).json({error:error})
         }
 
 }
@@ -28,8 +28,8 @@ exports.getall=async(req,res,next)=>{
    res.status(200).json({allexpenses:expenses})
     }
     catch (error) {
-        console.log(err)
-        res.status(500).json({err:err})
+        console.log(error)
+        res.status(500).json({err:error})
     }
 }
 exports.delete=async(req,res,next)=>{
