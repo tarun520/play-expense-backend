@@ -1,8 +1,12 @@
 const razorpay=require('razorpay')
 const Order=require('../purdefine')
 const user=require('../define')
+const jwt=require('jsonwebtoken')
 
-
+function generatetoken(id,name,ispremiumuser)
+{
+    return jwt.sign({userid:id,name:name,ispremiumuser:ispremiumuser},'urhuwqjiakeiq')
+}
 exports.purchasepremium=(req,res,next)=>{
     const rzp=new razorpay({
         key_id:'rzp_test_hkrqYCleSJ13Lh',
@@ -32,7 +36,7 @@ exports.updatestatus=async(req,res,next)=>{
             const promise2= req.user.update({ispremiumuser:true})
          Promise.all([promise1,promise2])
          .then((results)=>{
-             res.status(201).json({success:true,message:'transaction successfull',ispremiumuser:req.user.ispremiumuser})
+             res.status(201).json({success:true,message:'transaction successfull',token:generatetoken(req.user.id,undefined,true)})
          }).catch(err=>
              {throw new Error(err)})
     }
