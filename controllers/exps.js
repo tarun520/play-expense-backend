@@ -1,28 +1,29 @@
 const express=require('express');
 const exps=require('../expdefine')
 const bodyParser = require('body-parser');
-const Sequelize = require('sequelize');
+const sequelize = require('../database/db');
 const user=require('../define');
-const { where } = require('sequelize');
 
 const app=express()
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 exports.postexps=async(req,res,next)=>{
+    const t=await sequelize.transaction()
+    try {
     const amount=req.body.amount;
     const description=req.body.description;
     const category=req.body.choosecategory;
-    if(amount)
-    try {
-        const data=await exps.create({amount:amount,description:description,category:category,userId:req.user.id})
+    
+
+        const data=await exps.create({amount:amount,description:description,category:category,userId:req.user.id},{transaction:t})
         const totalexpenses=Number(req.user.totalexpenses)+Number(amount)
-        user.update({
-            totalexpenses:totalexpenses
-        },{where:{id:req.user.id}})
-        console.log(data)
+        await user.update({totalexpenses:totalexpenses},{where:{id:req.user.id},transaction:t})
+        t.commit()
         res.status(201).json({data:data})
-        } catch (error) {
+        }
+         catch (error) {
+           await t.rollback()
             console.log(error)
             res.status(500).json({error:error})
         }

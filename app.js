@@ -28,7 +28,7 @@ expenses.belongsTo(user)
 
 user.hasMany(Order);
 Order.belongsTo(user)
-sequelize.sync({force:true})
+sequelize.sync()
 .then(app.listen(3000))
 .catch(err=>console.log(err))
 
