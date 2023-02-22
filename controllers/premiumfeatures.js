@@ -6,15 +6,7 @@ const sequelize=require('../database/db')
 exports.gettheleaderboard=async(req,res,next)=>{
     try{
         const users=await User.findAll({
-            attributes:['id','name',[sequelize.fn('sum',sequelize.col('exps.amount')),'totalexpenses']],
-            include:[
-                {
-                    model:expense,
-                    attributes:[]
-                    
-                }
-            ],
-            group:['users.id'],
+
             order:[['totalexpenses','DESC']]
         });
         // const expenses=await Expense.findAll({

@@ -2,6 +2,8 @@ const express=require('express');
 const exps=require('../expdefine')
 const bodyParser = require('body-parser');
 const Sequelize = require('sequelize');
+const user=require('../define');
+const { where } = require('sequelize');
 
 const app=express()
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -14,7 +16,11 @@ exports.postexps=async(req,res,next)=>{
     if(amount)
     try {
         const data=await exps.create({amount:amount,description:description,category:category,userId:req.user.id})
-        console.log(data);
+        const totalexpenses=Number(req.user.totalexpenses)+Number(amount)
+        user.update({
+            totalexpenses:totalexpenses
+        },{where:{id:req.user.id}})
+        console.log(data)
         res.status(201).json({data:data})
         } catch (error) {
             console.log(error)
