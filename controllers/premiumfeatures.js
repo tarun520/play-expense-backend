@@ -1,32 +1,37 @@
 const Order=require('../purdefine')
 const User=require('../define')
-const Expense=require('../expdefine')
-const Sequelize=require('../database/db')
+const expense=require('../expdefine')
+const sequelize=require('../database/db')
 
 exports.gettheleaderboard=async(req,res,next)=>{
     try{
-        const users=await User.findAll();
-        const expenses=await Expense.findAll();
-        let userexpenses={};
+        const users=await User.findAll({
+            attributes:['id','name',[sequelize.fn('sum',sequelize.col('exps.amount')),'totalexpenses']],
+            include:[
+                {
+                    model:expense,
+                    attributes:[]
+                    
+                }
+            ],
+            group:['users.id'],
+            order:[['totalexpenses','DESC']]
+        });
+        // const expenses=await Expense.findAll({
+        //     attributes:['userId',]
+        //     ,group:['userId']
+        // });
+        // console.log(arrofuserexpenses)
+        // let userexpenses={};
         
-        expenses.forEach((expense)=>{
-            if(userexpenses[expense.userId])
-            {
-                userexpenses[expense.userId]=userexpenses[expense.userId] + expense.amount;
-    
-            }
-            else{
-                userexpenses[expense.userId]=expense.amount;
-            }
-        })
-        console.log(userexpenses)
-        var arrofuserexpenses=[];
-        users.forEach((user)=>{
-            arrofuserexpenses.push({name:user.name,totalexpenses:userexpenses[user.id]||0})
-        })
-        arrofuserexpenses.sort((a,b)=>b.totalexpenses-a.totalexpenses)
-        console.log(arrofuserexpenses)
-        res.status(200).send(arrofuserexpenses)
+        // console.log(userexpenses)
+        // var arrofuserexpenses=[];
+        // users.forEach((user)=>{
+        //     arrofuserexpenses.push({name:user.name,totalexpenses:expenses['userId']||0})
+        // })
+        // arrofuserexpenses.sort((a,b)=>b.totalexpenses-a.totalexpenses)
+        // console.log(arrofuserexpenses)
+        res.status(200).send(users)
 
         
     }
