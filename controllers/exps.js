@@ -3,6 +3,8 @@ const exps=require('../expdefine')
 const bodyParser = require('body-parser');
 const sequelize = require('../database/db');
 const user=require('../define');
+const AWS=require('aws-sdk');
+const { response } = require('express');
 
 const app=express()
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -58,3 +60,57 @@ exports.delete=async(req,res,next)=>{
         res.status(500).json({err:err})
     }
 }
+
+async function uploadToS3(data, filename) {
+    // try{
+        const BUCKET_NAME = 'expensetracker563';
+  
+    const s3bucket = new AWS.S3({
+      accessKeyId: 'AKIAYQF6SJQJWX6V665H',
+      secretAccessKey: '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',
+    });
+  
+      var params = {
+        Bucket: BUCKET_NAME,
+        Key: filename,
+        Body: data,
+        ACL:'public-read'
+      }
+      return new Promise((resolve,reject)=>[
+        s3bucket.upload(params, (err, s3response) => {
+            if (err) {
+              console.log('Something went wrong', err);
+              reject(err)
+            } else {
+              console.log('Uploaded successfully', s3response);
+              resolve(s3response.Location)
+            }
+          })
+      ])
+    // }
+    // catch(err){
+    //     throw new Error(err)
+    // }
+
+  }
+  
+  exports.download = async (req, res) => {
+    try {
+      const expenses = await exps.findAll({ where: { userId: req.user.id } });
+      const stringifiedExpenses = JSON.stringify(expenses);
+      const userid=req.user.id
+      const filename = `Expense.txt${userid}/${new Date()}`;
+      const fileurl =await uploadToS3(stringifiedExpenses, filename);
+      console.log(fileurl)
+      res.status(201).json({ fileurl, success: true });
+    } catch (error) {
+      console.log(error);
+         res.status(500).json({ err: error });
+    }
+  };
+
+  
+  
+  
+  
+  

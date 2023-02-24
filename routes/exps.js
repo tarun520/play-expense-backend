@@ -7,4 +7,5 @@ const authenticate=require('../middleware/auth')
 router.post('/expenses/add',authenticate,exps.postexps)
 router.get('/expenses/getall',authenticate,exps.getall)
 router.delete('/expenses/delete/:id',authenticate,exps.delete)
+router.get('/user/download',authenticate,exps.download)
 module.exports=router
