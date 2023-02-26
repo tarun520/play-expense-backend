@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express=require('express');
 const Sequelize=require('sequelize')
 const sequelize=require('./database/db')
@@ -13,12 +14,25 @@ const expenseroutes=require('./routes/exps.js')
 const purchaseroutes=require('./routes/purchase')
 const premiumfeatureroutes=require('./routes/premiumfeatures')
 const resetpassroutes=require('./routes/reset-password')
+const helmet=require('helmet')
+const compression=require('compression')
+const morgan=require('morgan')
+const fs=require('fs')
+const path=require('path')
 
 const app=express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors())
 
+const accesslogstream=fs.createWriteStream(
+    path.join(__dirname,'access.log'),
+    {flags:'a'}
+)
+
+app.use(helmet())
+app.use(compression())
+app.use(morgan('combined',{stream:accesslogstream}))
 app.use(signuproutes)
 app.use(loginroutes)
 app.use(expenseroutes)
