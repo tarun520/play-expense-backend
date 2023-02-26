@@ -36,21 +36,22 @@ const ITEMS_PER_PAGE = 2;
 exports.getall = async (req, res, next) => {
   try {
     const page=+req.query.page||1;
+    const limit=+req.query.limit||5;
     const expenses = await exps.findAll({
       where: { userId: req.user.id },
-      offset: (page - 1) * 2,
-      limit: 2,
+      offset: (page - 1) * limit,
+      limit: limit,
     });
     const totalexpenses = await exps.findAll({ where: { userId: req.user.id } });
     res.status(200).json({
       success:true,
       allexpenses: expenses,
       currentpage: page,
-      hasnextpage: (ITEMS_PER_PAGE * page < totalexpenses.length),
+      hasnextpage: (limit * page < totalexpenses.length),
       nextpage: page + 1,
       haspreviouspage: page > 1,
       previouspage: page - 1,
-      lastpage: Math.ceil(totalexpenses / ITEMS_PER_PAGE),
+      lastpage: Math.ceil(totalexpenses / limit),
     });
   } catch (error) {
     console.log(error);
