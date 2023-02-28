@@ -41,6 +41,10 @@ app.use(purchaseroutes)
 app.use(premiumfeatureroutes)
 app.use(resetpassroutes)
 
+app.use((req,res)=>{
+    console.log('url',req.url)
+    res.sendFile(path.join(__dirname,`public/${req.url}`))
+})
 user.hasMany(expenses);
 expenses.belongsTo(user)
 
