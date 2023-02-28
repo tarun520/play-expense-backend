@@ -1,6 +1,6 @@
 const razorpay=require('razorpay')
-const Order=require('../purdefine')
-const user=require('../define')
+const Order=require('../models/purdefine')
+const user=require('../models/define')
 const jwt=require('jsonwebtoken')
 
 function generatetoken(id,name,ispremiumuser)

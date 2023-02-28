@@ -1,5 +1,5 @@
 const jwt=require('jsonwebtoken')
-const User=require('../define')
+const User=require('../models/define')
 
 const authenticate=(req,res,next)=>{
     try{

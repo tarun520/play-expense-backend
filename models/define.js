@@ -1,6 +1,6 @@
 const Sequelize=require('sequelize');
 
-const sequelize=require('./database/db');
+const sequelize=require('../database/db');
 
 const user=sequelize.define('users',{
     id:{

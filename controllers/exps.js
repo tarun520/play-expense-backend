@@ -1,8 +1,8 @@
 const express=require('express');
-const exps=require('../expdefine')
+const exps=require('../models/expdefine')
 const bodyParser = require('body-parser');
 const sequelize = require('../database/db');
-const user=require('../define');
+const user=require('../models/define');
 const AWS=require('aws-sdk');
 const { response } = require('express');
 

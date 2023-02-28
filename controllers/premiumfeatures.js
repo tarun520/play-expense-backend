@@ -1,6 +1,6 @@
-const Order=require('../purdefine')
-const User=require('../define')
-const expense=require('../expdefine')
+const Order=require('../models/purdefine')
+const User=require('../models/define')
+const expense=require('../models/expdefine')
 const sequelize=require('../database/db')
 
 exports.gettheleaderboard=async(req,res,next)=>{

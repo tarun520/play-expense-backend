@@ -1,5 +1,5 @@
 const express=require('express');
-const user=require('../define')
+const user=require('../models/define')
 const bcrypt=require('bcrypt')
 const bodyParser = require('body-parser');
 const app=express()

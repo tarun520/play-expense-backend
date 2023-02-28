@@ -1,8 +1,8 @@
 const sgMail=require('@sendgrid/mail')
 const uuid = require('uuid');
 const bcrypt = require('bcrypt');
-const User=require('../define')
-const Forgotpassword=require('../forgot-pass-define');
+const User=require('../models/define')
+const Forgotpassword=require('../models/forgot-pass-define');
 
 // try{
 
