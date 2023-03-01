@@ -43,6 +43,7 @@ app.use(resetpassroutes)
 
 app.use((req,res)=>{
     console.log('url',req.url)
+    console.log('cicd deployment')
     res.sendFile(path.join(__dirname,`public/${req.url}`))
 })
 user.hasMany(expenses);
